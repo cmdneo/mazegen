@@ -23,6 +23,20 @@ func MakeMatrixLike[T, V any](example Matrix[V]) Matrix[T] {
 	return MakeMatrix[T](example.cols, example.rows)
 }
 
+// Return the index of the first item satisfying the predicate.
+// Return (-1, -1) if not found.
+func (m *Matrix[T]) Find(pred func(T) bool) (int, int) {
+	for y := range m.rows {
+		for x := range m.cols {
+			if pred(m.Get(x, y)) {
+				return x, y
+			}
+		}
+	}
+
+	return -1, -1
+}
+
 func (m *Matrix[T]) Slice() []T {
 	return m.data
 }
@@ -58,5 +72,6 @@ func (m Matrix[T]) String() string {
 		sb.WriteString(fmt.Sprintf("%v\n", m.data[y*m.cols:(y+1)*m.cols-1]))
 	}
 
-	return sb.String()
+	ret := sb.String()
+	return ret[:len(ret)-1] // Remove trailing newline
 }

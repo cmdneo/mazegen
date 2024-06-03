@@ -81,11 +81,11 @@ func (g *Grid) Cols() int { return g.cols }
 
 func (g *Grid) Rows() int { return g.rows }
 
-func GetAdjacentCells(g *Grid, v Point, result *[]Point, pred func(Point) bool) {
+func GetAdjacentCells(g *Grid, v Point, result *[]Point, ignored *ds.Matrix[bool]) {
 	*result = (*result)[:0]
 
 	appendIf := func(cond bool, n Point) {
-		if cond && pred(n) {
+		if cond && (ignored == nil || !ignored.Get(n.X, n.Y)) {
 			*result = append(*result, n)
 		}
 	}

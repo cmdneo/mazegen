@@ -41,12 +41,14 @@ func genFullEdgeList(g *Grid) ds.Stack[edge] {
 	edge_cnt := g.Cols()*g.rows*4 - 2*(g.Cols()+g.rows)
 	edges := ds.MakeStack[edge](edge_cnt)
 
+	// Horizontal edges
 	for y := range g.rows {
 		for x := range g.Cols() - 1 {
 			edges.Push(edge{Point{x, y}, Point{x + 1, y}})
 		}
 	}
 
+	// Vertical edges
 	for y := range g.rows - 1 {
 		for x := range g.Cols() {
 			edges.Push(edge{Point{x, y}, Point{x, y + 1}})

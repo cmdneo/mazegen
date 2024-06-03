@@ -21,7 +21,8 @@ var (
 
 func main() {
 	// Setup and parse optional CLI arguments
-	path := flag.String("path", "simple", "path length: simple, convoluted")
+	path := flag.String("path", "simple",
+		"path type: simple, uniform(slow), convoluted")
 	wall_size := flag.Int("wall", 4, "wall thickness")
 	cell_size := flag.Int("cell", 10, "cell size")
 	solved := flag.Bool("solve", false, "generate solution along with maze")
@@ -42,6 +43,8 @@ func main() {
 	switch *path {
 	case "simple":
 		algo = maze.AlgoKruskal
+	case "uniform":
+		algo = maze.AlgoLoopErasedRandWalk
 	case "convoluted":
 		algo = maze.AlgoRandWalk
 	default:

@@ -15,9 +15,6 @@ func (m *Maze) solve() bool {
 	at := m.start
 	neighs := make([]Point, 0, 4)
 	m.solution = []Point{}
-	is_new_neigh := func(v Point) bool {
-		return !visited.Get(v.X, v.Y) && m.grid.GetEdgeWeight(at, v) != 0
-	}
 
 	for {
 		stack.Push(at)
@@ -29,7 +26,9 @@ func (m *Maze) solve() bool {
 		}
 
 		for {
-			GetAdjacentCells(&m.grid, at, &neighs, is_new_neigh)
+			GetAdjacentCells(&m.grid, at, &neighs, &visited)
+			neighs = filter_disconnected(&m.grid, at, neighs)
+
 			if len(neighs) > 0 {
 				break
 			}
@@ -45,4 +44,19 @@ func (m *Maze) solve() bool {
 		stack.Push(at)
 		visited.Set(at.X, at.Y, true)
 	}
+}
+
+// Remove cells in input which have no edge with v.
+func filter_disconnected(g *Grid, v Point, input []Point) []Point {
+	// Partition and then cut off the end.
+	end := 0
+	for i, w := range input {
+		if g.GetEdgeWeight(v, w) == 0 {
+			continue
+		}
+		input[i], input[end] = input[end], input[i]
+		end++
+	}
+
+	return input[:end]
 }

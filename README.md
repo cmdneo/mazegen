@@ -19,7 +19,7 @@ Flags:
       -wall int
         	wall thickness (default 4)
       -path string
-        	path length: simple, convoluted (default "simple")
+        	path type: simple, uniform(slow), convoluted (default "simple")
       -solve
         	generate solution along with maze
 ```
